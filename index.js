@@ -1,5 +1,5 @@
 let currentWeek = getCurrentWeek();
-const currentDay = new Date().getDay();
+const currentDay = new Date().getDay() || 7;
 const weekList = document.getElementById('week-list');
 
 function getCurrentWeek() {
