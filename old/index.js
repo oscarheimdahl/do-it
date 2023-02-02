@@ -7,7 +7,7 @@ function getCurrentWeek() {
   startDate = new Date(currentDate.getFullYear(), 0, 1);
   const days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
 
-  return (weekNumber = Math.ceil(days / 7));
+  return Math.ceil(days / 7);
 }
 
 function buildWeek(weekNum) {
