@@ -11,6 +11,9 @@
   });
 
   function previouslyDidIt(date2: Date) {
+    console.log(date2);
+    console.log(doneIt);
+    console.log(`🔴`);
     return doneIt.find((date1) => date1.date.getTime() === date2.getTime())?.didIt === true;
   }
 
