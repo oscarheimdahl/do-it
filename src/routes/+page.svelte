@@ -68,7 +68,7 @@
       {#if !date.date}
         <DayButton faded />
       {:else}
-        <DayButton checked={date.checked} date={date.date} />
+        <DayButton previouslyChecked={date.checked} date={date.date} />
       {/if}
     {/each}
   </div>
@@ -81,6 +81,9 @@
     justify-content: center;
     height: 100%;
     padding-top: 50vh;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    box-sizing: border-box;
   }
 
   .days-grid {

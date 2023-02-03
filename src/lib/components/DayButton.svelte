@@ -1,12 +1,22 @@
 <script lang="ts">
-  import { json } from '@sveltejs/kit';
+  import { onMount } from 'svelte';
+  import { simpleHash } from '$/lib/helpers/hash';
 
   export let date: Date = new Date();
   export let faded: boolean = false;
+  export let previouslyChecked = false;
 
-  export let checked = false;
+  const CODE = 103181;
+  let checked = false;
+
   function onclick() {
-    // return;
+    const code = localStorage.getItem('code') ?? '';
+
+    if (simpleHash(code) !== CODE) {
+      setTimeout(() => (checked = !checked));
+      return;
+    }
+
     fetch('/', {
       method: 'POST',
       body: JSON.stringify({
@@ -15,6 +25,10 @@
       }),
     });
   }
+
+  onMount(() => {
+    checked = previouslyChecked;
+  });
 </script>
 
 <div>
