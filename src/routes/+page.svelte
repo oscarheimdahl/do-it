@@ -47,6 +47,10 @@
   dates.push(...datesInYear());
 </script>
 
+<svelte:head>
+  <title>Do it</title>
+</svelte:head>
+
 <div class="wrapper">
   <div class="days-grid">
     <span />
