@@ -6,7 +6,7 @@
   import DayButton from '$/lib/components/DayButton.svelte';
   import { getWeekOfDate } from '$/lib/helpers/getWeekOfDate';
 
-  const doneIt = (data.res as { date: Date; didit: 1 | 0 }[]).map((date) => {
+  const doneIt = (data.res as { date: string; didit: 1 | 0 }[]).map((date) => {
     return { date: date.date, didIt: date.didit === 1 };
   });
 
@@ -14,7 +14,7 @@
     console.log(date2);
     console.log(doneIt);
     console.log(`🔴`);
-    return doneIt.find((date1) => date1.date.getTime() === date2.getTime())?.didIt === true;
+    return doneIt.find((date1) => Math.abs(new Date(date1.date).getTime() - date2.getTime()) < 12 * 1000 * 3600)?.didIt;
   }
 
   const firstDayOfTheYear = new Date(new Date().getFullYear(), 0, 1);

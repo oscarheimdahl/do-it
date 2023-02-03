@@ -4,7 +4,7 @@
   export let date: Date = new Date();
   export let faded: boolean = false;
 
-  export let checked = true;
+  export let checked = false;
   function onclick() {
     // return;
     fetch('/', {
