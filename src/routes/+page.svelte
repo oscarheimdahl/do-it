@@ -1,7 +1,6 @@
 <script lang="ts">
   /** @type {import('./$types').PageData} */
   export let data;
-  console.log(data);
   import './style.css';
   import DayButton from '$/lib/components/DayButton.svelte';
   import { getWeekOfDate } from '$/lib/helpers/getWeekOfDate';
@@ -11,10 +10,8 @@
   });
 
   function previouslyDidIt(date2: Date) {
-    console.log(date2);
-    console.log(doneIt);
-    console.log(`🔴`);
-    return doneIt.find((date1) => Math.abs(new Date(date1.date).getTime() - date2.getTime()) < 12 * 1000 * 3600)?.didIt;
+    return !!doneIt.find((date1) => Math.abs(new Date(date1.date).getTime() - date2.getTime()) < 12 * 1000 * 3600)
+      ?.didIt; // date is within 12 hours to account for db timezone difference i think?
   }
 
   const firstDayOfTheYear = new Date(new Date().getFullYear(), 0, 1);

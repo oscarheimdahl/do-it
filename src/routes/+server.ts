@@ -9,7 +9,6 @@ export async function POST(event: RequestEvent<{}, string | null>) {
 
   if (!date || didit === undefined) throw error(400, 'Missing props in body');
 
-  console.log(date);
   const res = await setDidIt(date, didit);
   if (res.err) throw error(500, res.err);
 
