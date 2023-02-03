@@ -11,9 +11,10 @@ body {
 
 body {
   background-color: #072749;
+  color: white;
 }
 
-#line {
+/* #line {
   width: 100%;
   height: 3rem;
   background-color: white;
@@ -72,7 +73,7 @@ body {
   opacity: 1;
 }
 
-.day-checkbox {
+/* .day-checkbox {
   appearance: none;
   background-color: transparent;
   border: white solid 0.2rem;
@@ -98,7 +99,7 @@ body {
 
 .day-checkbox:checked {
   background-color: white;
-}
+} */
 
 @keyframes fadein {
   0% {
@@ -107,4 +108,4 @@ body {
   100% {
     opacity: 1;
   }
-}
+} */

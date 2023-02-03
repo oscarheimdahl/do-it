@@ -1,109 +1,100 @@
-<script>
+<script lang="ts">
+  /** @type {import('./$types').PageData} */
+  export let data;
+
   import './style.css';
-  import { browser } from '$app/environment';
-  import { onMount } from 'svelte';
+  import DayButton from '$/lib/components/DayButton.svelte';
+  import { getWeekOfDate } from '$/lib/helpers/getWeekOfDate';
 
-  let currentWeek;
-  let currentDay;
-  let weekList;
-
-  function getCurrentWeek() {
-    const currentDate = new Date();
-    const startDate = new Date(currentDate.getFullYear(), 0, 1);
-    const days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
-
-    return Math.ceil(days / 7);
-  }
-
-  function buildWeek(weekNum) {
-    const storedWeek = getStoredWeek(weekNum);
-    const current = weekNum === currentWeek ? 'current' : '';
-    const weekInnerHTML = `
-    <span class="week-number" id="week-number-${weekNum}">${weekNum}</span>
-    <input ${storedWeek[1] && 'checked'} disabled class="day-checkbox" type="checkbox" name="monday" />
-    <input ${storedWeek[2] && 'checked'} disabled class="day-checkbox" type="checkbox" name="tuesday" />
-    <input ${storedWeek[3] && 'checked'} disabled class="day-checkbox" type="checkbox" name="wednesday" />
-    <input ${storedWeek[4] && 'checked'} disabled class="day-checkbox" type="checkbox" name="thursday" />
-    <input ${storedWeek[5] && 'checked'} disabled class="day-checkbox" type="checkbox" name="friday" />
-    <input ${storedWeek[6] && 'checked'} disabled class="day-checkbox" type="checkbox" name="saturday" />
-    <input ${storedWeek[7] && 'checked'} disabled class="day-checkbox" type="checkbox" name="sunday" />
-  `;
-
-    const week = document.createElement('div');
-    week.className = `week ${current}`;
-
-    week.innerHTML = weekInnerHTML;
-    return week;
-  }
-
-  function setStoredWeek(weekNum, week) {
-    const key = `week-${weekNum}`;
-    const storedWeek = JSON.stringify(week) ?? {};
-    localStorage.setItem(key, storedWeek);
-  }
-
-  function getStoredWeek(weekNum) {
-    const key = `week-${weekNum}`;
-    const storedWeekString = localStorage.getItem(key);
-    const storedWeek = JSON.parse(storedWeekString) ?? {};
-    return storedWeek;
-  }
-
-  function scrollToWeek(weekNum) {
-    const REM = 16;
-    const weekRowHeight = REM * 3;
-    const weekRowGap = REM;
-    const dayLetterRowHeight = REM;
-    const scrollTop = dayLetterRowHeight + weekRowGap + (weekRowHeight + weekRowGap) * (weekNum - 1);
-    window.scroll({
-      top: scrollTop,
-      behavior: 'smooth',
-    });
-  }
-  function render() {
-    for (let i = 0; i < 52; i++) {
-      const week = buildWeek(i + 1);
-      weekList.appendChild(week);
-    }
-  }
-
-  function init() {
-    setTimeout(() => {
-      scrollToWeek(currentWeek);
-    }, 500);
-
-    render();
-
-    const weekRow = document.querySelector('.week.current');
-    const dayLabel = document.querySelector(`#week-list #day-number-${currentDay}`).classList.add('current');
-    const day = weekRow.children.item(currentDay);
-    day.classList.add('current');
-    day.removeAttribute('disabled');
-    day.addEventListener('change', function (e) {
-      const storedWeek = getStoredWeek(currentWeek);
-      storedWeek[currentDay] = e.target.checked;
-      setStoredWeek(currentWeek, storedWeek);
-    });
-  }
-
-  onMount(() => {
-    if (browser) {
-      currentWeek = getCurrentWeek();
-      currentDay = new Date().getDay() || 7;
-      weekList = document.getElementById('week-list');
-      init();
-    }
+  const doneIt = (data.res as { date: Date; didit: 1 | 0 }[]).map((date) => {
+    return { date: date.date, didIt: date.didit === 1 };
   });
+
+  function previouslyDidIt(date2: Date) {
+    return doneIt.find((date1) => date1.date.getTime() === date2.getTime())?.didIt === true;
+  }
+
+  const firstDayOfTheYear = new Date(new Date().getFullYear(), 0, 1);
+  const firstWeekOfTheYear = getWeekOfDate(firstDayOfTheYear);
+
+  function lastYearDaysInFirstWeek() {
+    const firstWeek = [];
+    for (let i = 0; i < dayOfWeek(firstDayOfTheYear); i++) {
+      firstWeek.push({ week: firstWeekOfTheYear, date: undefined, checked: false });
+    }
+    return firstWeek;
+  }
+
+  function datesInYear() {
+    const dates = [{ date: firstDayOfTheYear, week: firstWeekOfTheYear, checked: previouslyDidIt(firstDayOfTheYear) }];
+    while (dates.length < 400) {
+      const lastDate = dates.at(-1)!.date;
+      const nextDate = new Date(lastDate.setDate(lastDate.getDate() + 1));
+      const onFinalDate = dates[10] && nextDate.getFullYear() > dates[10].date.getFullYear();
+      if (onFinalDate) break;
+      dates.push({ date: nextDate, week: getWeekOfDate(nextDate), checked: previouslyDidIt(nextDate) });
+    }
+    return dates;
+  }
+
+  function dayOfWeek(date: Date) {
+    const day = date.getDay() - 1 > -1 ? date.getDay() - 1 : 6;
+    return day;
+  }
+
+  const dates: { date: Date | undefined; week: number; checked: boolean }[] = [];
+  dates.push(...lastYearDaysInFirstWeek());
+  dates.push(...datesInYear());
 </script>
 
-<div id="week-list">
-  <div id="day-letter-row">
-    <span id="day-number-1">M</span>
-    <span id="day-number-2">T</span>
-    <span id="day-number-3">O</span>
-    <span id="day-number-4">T</span>
-    <span id="day-number-5">F</span>
-    <span id="day-number-6">L</span>
-    <span id="day-number-7">S</span>
+<div class="wrapper">
+  <div class="days-grid">
+    <span />
+    <span class="day-label">M</span>
+    <span class="day-label">T</span>
+    <span class="day-label">O</span>
+    <span class="day-label">T</span>
+    <span class="day-label">F</span>
+    <span class="day-label">L</span>
+    <span class="day-label">S</span>
+    {#each dates as date, i}
+      {#if i % 7 === 0}
+        <span class="week-number">{date.week}</span>
+      {/if}
+      {#if !date.date}
+        <DayButton faded />
+      {:else}
+        <DayButton checked={date.checked} date={date.date} />
+      {/if}
+    {/each}
   </div>
 </div>
+
+<style>
+  .wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    padding-top: 50vh;
+  }
+
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 1rem;
+    width: min-content;
+    align-items: center;
+    padding-bottom: 50vh;
+    height: fit-content;
+  }
+
+  .day-label {
+    text-align: center;
+  }
+
+  .week-number {
+    text-align: right;
+    margin-right: 0.5rem;
+  }
+</style>
