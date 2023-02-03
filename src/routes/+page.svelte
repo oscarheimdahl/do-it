@@ -1,7 +1,7 @@
 <script lang="ts">
   /** @type {import('./$types').PageData} */
   export let data;
-
+  console.log(data);
   import './style.css';
   import DayButton from '$/lib/components/DayButton.svelte';
   import { getWeekOfDate } from '$/lib/helpers/getWeekOfDate';

@@ -37,10 +37,6 @@
     opacity: 0.1;
   }
 
-  input.current {
-    opacity: 1;
-  }
-
   input:hover {
     background-color: #ffffff88;
     cursor: pointer;
