@@ -63,4 +63,11 @@
   input:checked {
     background-color: white;
   }
+
+  @media screen and (max-width: 600px) {
+    input {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
 </style>
