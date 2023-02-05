@@ -10,8 +10,9 @@
   });
 
   function previouslyDidIt(date2: Date) {
+    // date is within 12 hours to account for db timezone difference i think?
     return !!doneIt.find((date1) => Math.abs(new Date(date1.date).getTime() - date2.getTime()) < 12 * 1000 * 3600)
-      ?.didIt; // date is within 12 hours to account for db timezone difference i think?
+      ?.didIt;
   }
 
   const firstDayOfTheYear = new Date(new Date().getFullYear(), 0, 1);
