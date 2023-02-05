@@ -61,9 +61,12 @@
     <span class="day-label">F</span>
     <span class="day-label">L</span>
     <span class="day-label">S</span>
-    <!-- <span /> -->
+    <span />
     {#each dates as date, i}
       {#if i % 7 === 0}
+        {#if i !== 0}
+          <span class="week-number hide">{date.week}</span>
+        {/if}
         <span class="week-number">{date.week}</span>
       {/if}
       {#if !date.date}
@@ -71,9 +74,7 @@
       {:else}
         <DayButton previouslyChecked={date.checked} date={date.date} />
       {/if}
-      <!-- {#if i % 7 === 0}
-        <span class="week-number">{date.week}</span>
-      {/if} -->
+      {#if i % 14 === 0}{/if}
     {/each}
   </div>
 </div>
@@ -92,7 +93,7 @@
 
   .days-grid {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(9, 1fr);
     gap: 1rem;
     width: min-content;
     align-items: center;
@@ -107,5 +108,15 @@
   .week-number {
     text-align: right;
     margin-right: 0.5rem;
+  }
+  .hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 600px) {
+    .days-grid {
+      gap: 0.5rem;
+    }
   }
 </style>
