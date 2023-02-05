@@ -61,6 +61,7 @@
     <span class="day-label">F</span>
     <span class="day-label">L</span>
     <span class="day-label">S</span>
+    <!-- <span /> -->
     {#each dates as date, i}
       {#if i % 7 === 0}
         <span class="week-number">{date.week}</span>
@@ -70,6 +71,9 @@
       {:else}
         <DayButton previouslyChecked={date.checked} date={date.date} />
       {/if}
+      <!-- {#if i % 7 === 0}
+        <span class="week-number">{date.week}</span>
+      {/if} -->
     {/each}
   </div>
 </div>

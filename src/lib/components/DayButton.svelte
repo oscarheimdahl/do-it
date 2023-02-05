@@ -9,11 +9,11 @@
   const CODE = 103181;
   let checked = false;
 
-  function onclick() {
+  function onclick(event: MouseEvent) {
     const code = localStorage.getItem('code') ?? '';
 
     if (simpleHash(code) !== CODE) {
-      setTimeout(() => (checked = !checked));
+      event.preventDefault();
       return;
     }
 
