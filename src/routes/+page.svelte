@@ -109,6 +109,7 @@
     text-align: right;
     margin-right: 0.5rem;
   }
+
   .hide {
     opacity: 0;
     pointer-events: none;

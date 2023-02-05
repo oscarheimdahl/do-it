@@ -29,10 +29,20 @@
   onMount(() => {
     checked = previouslyChecked;
   });
+  const today = date.toISOString().slice(5, 10) === new Date().toISOString().slice(5, 10);
+  const currentClass = today ? 'current' : '';
+  const fadedClass = faded ? 'faded' : '';
 </script>
 
 <div>
-  <input bind:checked class={faded ? 'faded' : ''} on:click={onclick} type="checkbox" name="" />
+  <input
+    disabled={faded}
+    bind:checked
+    class={fadedClass + ' ' + currentClass}
+    on:click={onclick}
+    type="checkbox"
+    name=""
+  />
 </div>
 
 <style>
@@ -45,6 +55,10 @@
     border-radius: 50%;
     transition: background-color 300ms, transform 150ms;
     opacity: 0.5;
+  }
+
+  input.current {
+    opacity: 1;
   }
 
   input.faded {
