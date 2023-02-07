@@ -34,16 +34,14 @@
   const fadedClass = faded ? 'faded' : '';
 </script>
 
-<div>
-  <input
-    disabled={faded}
-    bind:checked
-    class={fadedClass + ' ' + currentClass}
-    on:click={onclick}
-    type="checkbox"
-    name=""
-  />
-</div>
+<input
+  disabled={faded}
+  bind:checked
+  class={fadedClass + ' ' + currentClass}
+  on:click={onclick}
+  type="checkbox"
+  name=""
+/>
 
 <style>
   input {

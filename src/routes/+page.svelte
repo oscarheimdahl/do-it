@@ -4,6 +4,7 @@
   import './style.css';
   import DayButton from '$/lib/components/DayButton.svelte';
   import { getWeekOfDate } from '$/lib/helpers/getWeekOfDate';
+  import { onMount } from 'svelte';
 
   const doneIt = (data.res as { date: string; didit: 1 | 0 }[]).map((date) => {
     return { date: date.date, didIt: date.didit === 1 };
@@ -46,6 +47,13 @@
   const dates: { date: Date | undefined; week: number; checked: boolean }[] = [];
   dates.push(...lastYearDaysInFirstWeek());
   dates.push(...datesInYear());
+
+  onMount(() => {
+    const REM = 16;
+    const GAP = window.innerWidth > 600 ? REM : 0.5 * REM;
+    const INPUT = window.innerWidth > 600 ? REM * 3 : REM * 2;
+    window.scroll({ top: (INPUT + GAP) * getWeekOfDate(new Date()), behavior: 'smooth' });
+  });
 </script>
 
 <svelte:head>
@@ -75,35 +83,45 @@
       {:else}
         <DayButton previouslyChecked={date.checked} date={date.date} />
       {/if}
-      {#if i % 14 === 0}{/if}
     {/each}
   </div>
 </div>
 
+<!-- <div class="line" /> -->
 <style>
+  /* .line {
+    position: fixed;
+    top: calc(50% - 1.5rem);
+    height: 3rem;
+    width: 100%;
+    background-color: mediumseagreen;
+    opacity: 0.5;
+  } */
   .wrapper {
     width: 100%;
     display: flex;
     justify-content: center;
     height: 100%;
-    padding-top: 50vh;
+    padding-top: calc(50vh - 1.5rem);
     padding-right: 1rem;
     padding-left: 1rem;
     box-sizing: border-box;
   }
 
   .days-grid {
+    transform: translateY(-36px);
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     gap: 1rem;
     width: min-content;
     align-items: center;
-    padding-bottom: 50vh;
+    padding-bottom: calc(50vh - 1.5rem);
     height: fit-content;
   }
 
   .day-label {
     text-align: center;
+    height: 20px;
   }
 
   .week-number {
@@ -119,6 +137,7 @@
   @media screen and (max-width: 600px) {
     .days-grid {
       gap: 0.5rem;
+      transform: translateY(-28px);
     }
   }
 </style>
